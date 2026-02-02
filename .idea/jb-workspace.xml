@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WorkspaceSettings">
+    <project name="teams-plugin" path="$PROJECT_DIR$/../teams-plugin">
+      <vcs id="Git" remoteUrl="git@github.com:MaddRobot-App-Lab/teams-plugin.git" />
+    </project>
+    <project name="ncies-Unified-Dependency-Manager-UDM-" path="$PROJECT_DIR$/../ncies-Unified-Dependency-Manager-UDM-">
+      <vcs id="Git" remoteUrl="https://github.com/MykullZeroOne/ncies-Unified-Dependency-Manager-UDM-.git" />
+    </project>
+    <project name="ConSync Parent" path="$PROJECT_DIR$/../ConSync">
+      <vcs id="Git" remoteUrl="https://github.com/MykullZeroOne/ConSync.git" />
+    </project>
+    <project name="docs-plugin" path="$PROJECT_DIR$/../docs-plugin">
+      <vcs id="Git" remoteUrl="https://github.com/MykullZeroOne/docs-plugin.git" />
+    </project>
+    <option name="workspace" value="true" />
+  </component>
+</project>

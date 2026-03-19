@@ -1,0 +1,9 @@
+{
+  "id": "com.keyscript.docs",
+  "repo": "MykullZeroOne/docs-plugin",
+  "name": "Docs Plugin",
+  "description": "Documentation browser plugin for JetBrains IDEs.",
+  "vendor": "Keyscript",
+  "sinceBuild": "253",
+  "untilBuild": "253.*"
+}

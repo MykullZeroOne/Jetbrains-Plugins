@@ -1,0 +1,9 @@
+{
+  "id": "com.keyscript.plugin",
+  "repo": "MykullZeroOne/keyscript-intellij-plugin",
+  "name": "Keyscript IDE",
+  "description": "Development environment for Keystone scripts with JCEF preview, embedded proxy, and CR framework completions.",
+  "vendor": "Keyscript",
+  "sinceBuild": "253",
+  "untilBuild": "253.*"
+}

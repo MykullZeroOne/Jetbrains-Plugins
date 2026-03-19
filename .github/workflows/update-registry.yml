@@ -1,0 +1,89 @@
+name: Update Plugin Registry
+
+on:
+  # Triggered by plugin repos after a release
+  repository_dispatch:
+    types: [plugin-released]
+  # Manual trigger to rebuild from all releases
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  rebuild-registry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rebuild updatePlugins.xml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > updatePlugins.xml
+          echo '<plugins>' >> updatePlugins.xml
+
+          # Read each plugin definition from plugins/ directory
+          for plugin_file in plugins/*.json; do
+            [ -f "$plugin_file" ] || continue
+
+            PLUGIN_ID=$(jq -r '.id' "$plugin_file")
+            REPO=$(jq -r '.repo' "$plugin_file")
+            NAME=$(jq -r '.name' "$plugin_file")
+            DESCRIPTION=$(jq -r '.description' "$plugin_file")
+            VENDOR=$(jq -r '.vendor' "$plugin_file")
+            SINCE_BUILD=$(jq -r '.sinceBuild' "$plugin_file")
+            UNTIL_BUILD=$(jq -r '.untilBuild' "$plugin_file")
+
+            echo "Processing $NAME ($REPO)..."
+
+            # Get latest release from the plugin's repo
+            RELEASE_JSON=$(gh api "repos/$REPO/releases/latest" 2>/dev/null || echo '{}')
+            TAG=$(echo "$RELEASE_JSON" | jq -r '.tag_name // empty')
+
+            if [ -z "$TAG" ]; then
+              echo "  No releases found for $REPO, skipping"
+              continue
+            fi
+
+            VERSION="${TAG#v}"
+
+            # Find the .zip asset
+            DOWNLOAD_URL=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith(".zip")) | .browser_download_url' | head -1)
+
+            if [ -z "$DOWNLOAD_URL" ]; then
+              echo "  No ZIP asset found in release $TAG, skipping"
+              continue
+            fi
+
+            echo "  Version: $VERSION, URL: $DOWNLOAD_URL"
+
+            cat >> updatePlugins.xml << EOF
+  <plugin
+    id="$PLUGIN_ID"
+    url="$DOWNLOAD_URL"
+    version="$VERSION">
+    <idea-version since-build="$SINCE_BUILD" until-build="$UNTIL_BUILD"/>
+    <name>$NAME</name>
+    <description>$DESCRIPTION</description>
+    <vendor>$VENDOR</vendor>
+  </plugin>
+EOF
+          done
+
+          echo '</plugins>' >> updatePlugins.xml
+
+          echo ""
+          echo "=== Generated updatePlugins.xml ==="
+          cat updatePlugins.xml
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          publish_branch: gh-pages
+          keep_files: false
+          exclude_assets: '.github,plugins,.git,.idea,CLAUDE.md'

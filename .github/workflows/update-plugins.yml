@@ -20,8 +20,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo '<?xml version="1.0" encoding="UTF-8"?>' > updatePlugins.xml
-          echo '<plugins>' >> updatePlugins.xml
+          mkdir -p _site
+
+          echo '<?xml version="1.0" encoding="UTF-8"?>' > _site/updatePlugins.xml
+          echo '<plugins>' >> _site/updatePlugins.xml
 
           for plugin_file in plugins/*.json; do
             [ -f "$plugin_file" ] || continue
@@ -52,24 +54,24 @@ jobs:
               continue
             fi
 
-            echo "  Version: $VERSION"
-            echo "  <plugin id=\"$PLUGIN_ID\" url=\"$DOWNLOAD_URL\" version=\"$VERSION\">" >> updatePlugins.xml
-            echo "    <idea-version since-build=\"$SINCE_BUILD\" until-build=\"$UNTIL_BUILD\"/>" >> updatePlugins.xml
-            echo "    <name>$NAME</name>" >> updatePlugins.xml
-            echo "    <description>$DESCRIPTION</description>" >> updatePlugins.xml
-            echo "    <vendor>$VENDOR</vendor>" >> updatePlugins.xml
-            echo "  </plugin>" >> updatePlugins.xml
+            echo "  Version: $VERSION, URL: $DOWNLOAD_URL"
+            echo "  <plugin id=\"$PLUGIN_ID\" url=\"$DOWNLOAD_URL\" version=\"$VERSION\">" >> _site/updatePlugins.xml
+            echo "    <idea-version since-build=\"$SINCE_BUILD\" until-build=\"$UNTIL_BUILD\"/>" >> _site/updatePlugins.xml
+            echo "    <name>$NAME</name>" >> _site/updatePlugins.xml
+            echo "    <description>$DESCRIPTION</description>" >> _site/updatePlugins.xml
+            echo "    <vendor>$VENDOR</vendor>" >> _site/updatePlugins.xml
+            echo "  </plugin>" >> _site/updatePlugins.xml
           done
 
-          echo '</plugins>' >> updatePlugins.xml
+          echo '</plugins>' >> _site/updatePlugins.xml
+
+          echo ""
           echo "=== Generated updatePlugins.xml ==="
-          cat updatePlugins.xml
+          cat _site/updatePlugins.xml
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
+          publish_dir: ./_site
           publish_branch: gh-pages
-          keep_files: false
-          exclude_assets: '.github,plugins,.git,.idea,CLAUDE.md'

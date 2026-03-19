@@ -1,3 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
+  <plugin id="com.keyscript.plugin" url="https://github.com/MykullZeroOne/keyscript-intellij-plugin/releases/download/v2.0.0/keyscript-intellij-plugin-2.0.0.zip" version="2.0.0">
+    <idea-version since-build="253" until-build="253.*"/>
+    <name>Keyscript IDE</name>
+    <description>Development environment for Keystone scripts with JCEF preview, embedded proxy, and CR framework completions.</description>
+    <vendor>Keyscript</vendor>
+  </plugin>
 </plugins>

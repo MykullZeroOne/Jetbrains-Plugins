@@ -96,3 +96,4 @@ git push origin v1.0.0
 ```
 
 The workflow will build the plugin, create a GitHub Release with the ZIP, and trigger the central registry to regenerate `updatePlugins.xml`.
+

@@ -1,10 +1,8 @@
 name: Update Plugin Registry
 
 on:
-  # Triggered by plugin repos after a release
   repository_dispatch:
     types: [plugin-released]
-  # Manual trigger to rebuild from all releases
   workflow_dispatch:
 
 permissions:
@@ -25,7 +23,6 @@ jobs:
           echo '<?xml version="1.0" encoding="UTF-8"?>' > updatePlugins.xml
           echo '<plugins>' >> updatePlugins.xml
 
-          # Read each plugin definition from plugins/ directory
           for plugin_file in plugins/*.json; do
             [ -f "$plugin_file" ] || continue
 
@@ -39,43 +36,32 @@ jobs:
 
             echo "Processing $NAME ($REPO)..."
 
-            # Get latest release from the plugin's repo
             RELEASE_JSON=$(gh api "repos/$REPO/releases/latest" 2>/dev/null || echo '{}')
             TAG=$(echo "$RELEASE_JSON" | jq -r '.tag_name // empty')
 
             if [ -z "$TAG" ]; then
-              echo "  No releases found for $REPO, skipping"
+              echo "  No releases found, skipping"
               continue
             fi
 
             VERSION="${TAG#v}"
-
-            # Find the .zip asset
             DOWNLOAD_URL=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith(".zip")) | .browser_download_url' | head -1)
 
             if [ -z "$DOWNLOAD_URL" ]; then
-              echo "  No ZIP asset found in release $TAG, skipping"
+              echo "  No ZIP asset in release $TAG, skipping"
               continue
             fi
 
-            echo "  Version: $VERSION, URL: $DOWNLOAD_URL"
-
-            cat >> updatePlugins.xml << EOF
-  <plugin
-    id="$PLUGIN_ID"
-    url="$DOWNLOAD_URL"
-    version="$VERSION">
-    <idea-version since-build="$SINCE_BUILD" until-build="$UNTIL_BUILD"/>
-    <name>$NAME</name>
-    <description>$DESCRIPTION</description>
-    <vendor>$VENDOR</vendor>
-  </plugin>
-EOF
+            echo "  Version: $VERSION"
+            echo "  <plugin id=\"$PLUGIN_ID\" url=\"$DOWNLOAD_URL\" version=\"$VERSION\">" >> updatePlugins.xml
+            echo "    <idea-version since-build=\"$SINCE_BUILD\" until-build=\"$UNTIL_BUILD\"/>" >> updatePlugins.xml
+            echo "    <name>$NAME</name>" >> updatePlugins.xml
+            echo "    <description>$DESCRIPTION</description>" >> updatePlugins.xml
+            echo "    <vendor>$VENDOR</vendor>" >> updatePlugins.xml
+            echo "  </plugin>" >> updatePlugins.xml
           done
 
           echo '</plugins>' >> updatePlugins.xml
-
-          echo ""
           echo "=== Generated updatePlugins.xml ==="
           cat updatePlugins.xml
 

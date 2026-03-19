@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <plugin id="com.keyscript.plugin" url="https://github.com/MykullZeroOne/keyscript-intellij-plugin/releases/download/v2.0.0/keyscript-intellij-plugin-2.0.0.zip" version="2.0.0" size="13395364" date="2026-03-19">
+  <plugin id="com.keyscript.plugin" url="https://github.com/MykullZeroOne/keyscript-intellij-plugin/releases/download/v2.1.0/keyscript-intellij-plugin-2.1.0.zip" version="2.1.0" size="13398840" date="2026-03-19">
     <idea-version since-build="253" until-build="253.*"/>
     <name>Keyscript IDE</name>
     <vendor url="https://github.com/MykullZeroOne">Madd Robot</vendor>
     <description><![CDATA[Development environment for Keystone script creation. Provides JCEF browser preview, embedded proxy server, session authentication, CR framework completions, table browser, query builder, and script deployment tools.]]></description>
-    <change-notes><![CDATA[Release 2.0.0 — see <a href="https://github.com/MykullZeroOne/keyscript-intellij-plugin/releases/tag/v2.0.0">release notes</a> for details.]]></change-notes>
+    <change-notes><![CDATA[Release 2.1.0 — see <a href="https://github.com/MykullZeroOne/keyscript-intellij-plugin/releases/tag/v2.1.0">release notes</a> for details.]]></change-notes>
   </plugin>
 </plugins>

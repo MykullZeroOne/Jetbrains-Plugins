@@ -33,6 +33,7 @@ jobs:
             NAME=$(jq -r '.name' "$plugin_file")
             DESCRIPTION=$(jq -r '.description' "$plugin_file")
             VENDOR=$(jq -r '.vendor' "$plugin_file")
+            VENDOR_URL=$(jq -r '.vendorUrl // ""' "$plugin_file")
             SINCE_BUILD=$(jq -r '.sinceBuild' "$plugin_file")
             UNTIL_BUILD=$(jq -r '.untilBuild' "$plugin_file")
 
@@ -48,18 +49,24 @@ jobs:
 
             VERSION="${TAG#v}"
             DOWNLOAD_URL=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith(".zip")) | .browser_download_url' | head -1)
+            RELEASE_NOTES=$(echo "$RELEASE_JSON" | jq -r '.body // ""' | head -20)
+            RELEASE_DATE=$(echo "$RELEASE_JSON" | jq -r '.published_at // ""' | cut -d'T' -f1)
 
             if [ -z "$DOWNLOAD_URL" ]; then
               echo "  No ZIP asset in release $TAG, skipping"
               continue
             fi
 
-            echo "  Version: $VERSION, URL: $DOWNLOAD_URL"
-            echo "  <plugin id=\"$PLUGIN_ID\" url=\"$DOWNLOAD_URL\" version=\"$VERSION\">" >> _site/updatePlugins.xml
+            SIZE=$(echo "$RELEASE_JSON" | jq -r '.assets[] | select(.name | endswith(".zip")) | .size' | head -1)
+
+            echo "  Version: $VERSION, Size: $SIZE bytes"
+
+            echo "  <plugin id=\"$PLUGIN_ID\" url=\"$DOWNLOAD_URL\" version=\"$VERSION\" size=\"$SIZE\" date=\"$RELEASE_DATE\">" >> _site/updatePlugins.xml
             echo "    <idea-version since-build=\"$SINCE_BUILD\" until-build=\"$UNTIL_BUILD\"/>" >> _site/updatePlugins.xml
             echo "    <name>$NAME</name>" >> _site/updatePlugins.xml
-            echo "    <description>$DESCRIPTION</description>" >> _site/updatePlugins.xml
-            echo "    <vendor>$VENDOR</vendor>" >> _site/updatePlugins.xml
+            echo "    <vendor url=\"$VENDOR_URL\">$VENDOR</vendor>" >> _site/updatePlugins.xml
+            echo "    <description><![CDATA[$DESCRIPTION]]></description>" >> _site/updatePlugins.xml
+            echo "    <change-notes><![CDATA[Release $VERSION — see <a href=\"https://github.com/$REPO/releases/tag/$TAG\">release notes</a> for details.]]></change-notes>" >> _site/updatePlugins.xml
             echo "  </plugin>" >> _site/updatePlugins.xml
           done
 

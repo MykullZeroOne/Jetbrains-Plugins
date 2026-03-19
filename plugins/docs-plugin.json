@@ -3,7 +3,8 @@
   "repo": "MykullZeroOne/docs-plugin",
   "name": "Docs Plugin",
   "description": "Documentation browser plugin for JetBrains IDEs.",
-  "vendor": "Keyscript",
+  "vendor": "Madd Robot",
+  "vendorUrl": "https://github.com/MykullZeroOne",
   "sinceBuild": "253",
   "untilBuild": "253.*"
 }

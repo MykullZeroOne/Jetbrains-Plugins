@@ -5,6 +5,6 @@
   "description": "Development environment for Keystone script creation. Provides JCEF browser preview, embedded proxy server, session authentication, CR framework completions, table browser, query builder, and script deployment tools.",
   "vendor": "Madd Robot",
   "vendorUrl": "https://github.com/MykullZeroOne",
-  "sinceBuild": "253",
-  "untilBuild": "253.*"
+  "sinceBuild": "265",
+  "untilBuild": "265.*"
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
   <plugin id="com.keyscript.plugin" url="https://github.com/MykullZeroOne/keyscript-intellij-plugin/releases/download/v2.1.0/keyscript-intellij-plugin-2.1.0.zip" version="2.1.0" size="13398840" date="2026-03-19">
-    <idea-version since-build="253" until-build="253.*"/>
+    <idea-version since-build="253" until-build="263.*"/>
     <name>Keyscript IDE</name>
     <vendor url="https://github.com/MykullZeroOne">Madd Robot</vendor>
     <description><![CDATA[Development environment for Keystone script creation. Provides JCEF browser preview, embedded proxy server, session authentication, CR framework completions, table browser, query builder, and script deployment tools.]]></description>

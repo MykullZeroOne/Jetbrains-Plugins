@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugins>
-  <plugin id="com.keyscript.plugin" url="https://github.com/MykullZeroOne/keyscript-intellij-plugin/releases/download/v2.2.0/keyscript-intellij-plugin-2.2.0.zip" version="2.2.0" size="14096765" date="2026-03-31">
+  <plugin id="com.keyscript.plugin" url="https://github.com/MykullZeroOne/keyscript-intellij-plugin/releases/download/v2.2.0/keyscript-intellij-plugin-2.2.0.zip" version="2.2.0" size="14099093" date="2026-04-01">
     <idea-version since-build="261" until-build="261.*"/>
     <name>Keyscript IDE</name>
     <vendor url="https://github.com/MykullZeroOne">Madd Robot</vendor>
